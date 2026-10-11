@@ -1,6 +1,6 @@
 Antemir Andreea-Catalina 324CA
 
-### Protocol Reliable peste UDP - Tema 2 PCOM
+## Protocol Reliable peste UDP - Tema 2 PCOM
 
 Pentru aceasta tema am implementat un protocol de trasport peste UDP, un fel de
 mini TCP. Tinta a fost sa ma asigur ca pachetele ajung in ordine, nu se pierd
@@ -9,7 +9,7 @@ Am folosit o structura `connection` pentru a tine minte starea fiecarui client,
 astfel incat servarul sa poata sa comunice cu mai multi clienti in acelasi timp
 fara sa le amestece pachetele.
 
-#### 1. Conectarea (Three-Way-Handshake)
+### 1. Conectarea (Three-Way-Handshake)
 - clientul trimite `SYN` pe portul `8032`
 - serverul ii face un socket nou pe un port random ales de sistemul de operare
 si il trimite inapoi printr un `SYN-ACK`
@@ -19,7 +19,7 @@ am pus un timer pe socket (`SO_RCVTIMEO`) cu retry
 - practic insista pana reuseste sa se conecteze
 - ultimul `ACK` este trimis de mai multe ori pentru siguranta
 
-#### 2. Trimiterea datelor (sender)
+### 2. Trimiterea datelor (sender)
 - am calculat fereastra optima pe baza formulei
 - `BDP = speed * 1000000 / 8 * (2 * delay) / 1000`
 - ca sa fiu sigura ca nu e prea mica la viteze mici i am pus un minim de 30
@@ -29,7 +29,7 @@ de segmente
 - am folosit un timer pe `timerfd` (setat la 500ms)
 - pachetele plecate pe retea stau intr un map (`inflight_segments`), iar daca da timeout, le retransmit pe cele neconfirmate
 
-#### 3. Primirea datelor (receiver)
+### 3. Primirea datelor (receiver)
 - cand un pachet vine la timp (`expected_seq`) il pun direct in buffer ul de citire
 - daca vine un pachet care s a pierdut pe drum si au ajuns urmatoarele inaintea lui, nu il arunc, ci il salvez in `out_of_order_buffer`
 - cand vine in sfarsit pachetul intarziat, iau si pachetele din dictionar si le pun in ordine
